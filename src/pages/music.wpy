@@ -466,10 +466,7 @@ export default class Music extends wepy.page {
 
     initNewAudio() {
             this.audioCtx = wx.getBackgroundAudioManager()  
-            this.audioCtx.title = this.musicInfo[0].name
-            this.audioCtx.coverImgUrl = this.musicInfo[0].cover
-            this.audioCtx.singer = this.musicInfo[0].auther
-            this.audioCtx.src = this.musicInfo[0].src
+            this.baseAudioConfig(0)
             //src赋值后自动播放
             this.playFlag = false 
             this.audioCtx.onTimeUpdate(() => {        
@@ -491,14 +488,18 @@ export default class Music extends wepy.page {
 
     updateOldAudio(index) {
         this.audioCtx.pause()
-        this.audioCtx.title = this.musicInfo[index].name
-        this.audioCtx.coverImgUrl = this.musicInfo[index].cover
-        this.audioCtx.singer = this.musicInfo[index].auther
-        this.audioCtx.src = this.musicInfo[index].src
+        this.baseAudioConfig(index)
         this.timer = "00:00"
         this.timestamp = "00:00"
         this.currentTime = 0
         this.totalTime = 100
+    }
+
+    baseAudioConfig(index) {
+        this.audioCtx.title = this.musicInfo[index].name
+        this.audioCtx.coverImgUrl = this.musicInfo[index].cover
+        this.audioCtx.singer = this.musicInfo[index].auther
+        this.audioCtx.src = this.musicInfo[index].src
     }
 
     getSearchContent(e) {
