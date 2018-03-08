@@ -1,0 +1,190 @@
+<style lang="less">
+// 字体图标 -start
+@font-face {font-family: "iconfont";
+  src: url('./assets/fonts/iconfont.eot?t=1520239390775'); /* IE9*/
+  src: url('./assets/fonts/iconfont.eot?t=1520239390775#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+  url('./assets/fonts/iconfont.ttf?t=1520239390775') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('./assets/fonts/iconfont.svg?t=1520239390775#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-account:before { content: "\e6b8"; }
+
+.icon-discount:before { content: "\e6c5"; }
+
+.icon-gifts:before { content: "\e6db"; }
+
+.icon-agriculture:before { content: "\e707"; }
+
+.icon-bofang:before { content: "\e662"; }
+
+.icon-pre:before { content: "\e686"; }
+
+.icon-next:before { content: "\e687"; }
+
+.icon-ting:before { content: "\e606"; }
+// 字体图标 -end
+
+
+//公用样式 -start
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+.marginTop25 {
+  margin-top:50rpx;
+  
+}
+.marginTop15 {
+  margin-top:30rpx;
+  
+}
+.borderAndRadius {
+  border: 1rpx solid #ccc;
+  border-radius: 6px;
+}
+.input-within {
+  padding: 8rpx 20rpx;
+  font-size: 28rpx;
+  width: 86%;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+.block-center {
+  margin: 0 auto;
+}
+.width-90p{
+  width: 90%;
+}
+.width-86p{
+  width: 86%;
+}
+.width-70p{
+  width: 70%;
+}
+.box-normal {
+  padding: 0 20rpx 20rpx;
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: warp;
+}
+.font-size14 {
+  font-size: 14px;
+}
+.font-size12 {
+  font-size: 12px;
+}
+.font-size16 {
+  font-size: 16px;
+}
+.gray {
+  color: #bbb;
+}
+.green {
+  color: #337238;
+}
+.black {
+  color: #000;
+}
+
+.paddingTB5 {
+  padding: 10rpx 0 30rpx;
+}
+.paddingTB15 {
+  padding: 30rpx 0;
+}
+.boder-bottom {
+  border-bottom: 1rpx solid #ccc;
+}
+.flex-colum {
+  display: flex;
+  flex-direction: column;
+}
+.active {
+  background-color: #772A95!important;
+  opacity: .8!important;
+}
+.overflow-hidden {
+  overflow-x: hidden;
+}
+.ignoreText {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-wrap: normal;
+}
+//公用样式 -end
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/index',
+      'pages/music'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#8E32B2',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'white'
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+    this.testAsync()
+  }
+
+  sleep (s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync () {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

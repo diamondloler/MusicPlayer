@@ -1,0 +1,216 @@
+<style lang="less">
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100rpx;
+  }
+
+  .userinfo-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+  }
+
+  .userinfo-nickname {
+    color: #000;
+    margin-top: 20rpx;
+  }
+  .music-provider {
+    width:80%;
+    margin-top: 48rpx;
+    .title {
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 1.2;
+      align-self: center;
+      .gifts {
+        vertical-align: center;
+        display: inline-block;
+        font-size: 16px;
+        color: red;
+      }
+    }
+    .button-list {
+      justify-content: space-around;
+      margin-top: 60rpx;
+      .button-round {
+         border-radius: 50%;
+         width: 130rpx;
+         height: 130rpx;
+         line-height: 130rpx;
+         color:#fff;
+         background: #81caef;
+         border: none;
+         box-shadow: 0 1px 2px 0 rgba(0,0,0,.18), 0 2px 4px 0 rgba(0,0,0,.15);
+      }
+    }
+    .id-input {
+      align-self: center;
+      box-sizing: border-box;
+    }
+    .comfirm-btn {
+       height: 80rpx;
+       line-height: 80rpx;
+    }
+    .show-select {
+      box-sizing: border-box;
+      width: 86%;
+      height: 80rpx;
+      line-height: 2.3;
+      padding: 8rpx 20rpx;
+    }
+  }
+</style>
+<template>
+  <view class="container">
+    <view class="userinfo">
+      <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
+      <view class="userinfo-nickname font-size14">欢迎 {{ userInfo.nickName }} 进入 <b style="color:#81caef;">MMFM</b> 小程序~</view>
+    </view>
+    <view class="music-provider flex-colum">
+        <p class="title">选择音乐供应商 <i class="gifts iconfont icon-gifts"></i></p>
+        <view class="button-list flex-row">
+            <button  plain @tap="selectProvider(0)" class="{{providers_status[0] ? 'button-round active' : 'button-round'}}"  >网易</button>
+            <button plain @tap="selectProvider(1)" class="{{providers_status[1] ? 'active button-round' : 'button-round'}}" >虾米</button>
+            <button plain @tap="selectProvider(2)" class="{{providers_status[2] ? 'active button-round' : 'button-round'}}" >腾讯</button>
+        </view>
+        <picker class="marginTop25" bindchange="bindPickerChange" value="{{select_type}}" range="{{select_range}}">
+          <view class="block-center show-select font-size14  borderAndRadius">{{select_type}}</view>
+        </picker>
+        <input bindinput="getID" class="id-input input-within borderAndRadius marginTop15" placeholder="输入对应ID" type="text" />
+        <button type="primary" class="width-86p comfirm-btn marginTop15 font-size14" @tap="enterMusicList" >进入音乐列表</button>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+ 
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: 'MMFM'
+    }
+ 
+ 
+
+    data = {
+      userInfo: {
+        nickName: '加载中...'
+      },
+      select_type: '请选择获取的音乐类型',
+      select_range: [], //当选择了提供商才会有范围
+      provider: '', //音乐提供商
+      providers_status:[0, 0, 0], //音乐提供商们的状态 1网易 2虾米 3腾讯
+      music_id:0
+    }
+
+    watch = {
+      provider (newValue, oldValue) {
+        if (newValue && newValue == '腾讯') {
+          this.select_range = ['歌单']
+        } else {
+          this.select_range = ['单首歌曲', '专辑', '歌单']
+        }
+        this.select_type = '请选择获取的音乐类型'
+        this.$apply() //异步更新数据 需要强制更新脏数据
+      }
+    }
+
+    methods = {
+      selectProvider(index) {
+        var providers = ['网易', '虾米', '腾讯']
+        this.providers_status = [0, 0, 0] //先复位
+        this.providers_status[index] = 1 //再激活
+        this.provider = providers[index] //选择供应商
+      },
+      enterMusicList() {
+        const model = this
+
+        if (!model.provider || !model.select_type || !model.music_id) return
+
+        var url = model.getRequestUrl(model.provider, model.select_type),
+            id = model.music_id
+        console.log('ajax start')
+        wepy.request({
+            url: url,
+            data: {
+              id: id
+            },
+            success: function (res) {
+              var data = res.data
+              //获取资源成功后，将数据放入缓存，跳转页面
+              wepy.setStorage({
+                key: 'musicInfo',
+                data:data,
+                success: function(res) {
+                  wepy.navigateTo({
+                    url:'music'
+                  })
+                }
+              })
+            },
+            fail: function (err) {
+              console.log(err)
+            }
+          })
+      }
+    }
+
+    bindPickerChange(e) {
+      this.select_type = this.select_range[e.detail.value]
+    }
+
+    getID(e) {
+      this.music_id = e.detail.value
+    }
+    
+    getRequestUrl(provider, select_type) {
+       if (provider == '网易') {
+            switch (select_type) {
+              case '单首歌曲':
+                return 'https://weapp.demo2.mixmedia.com/netease/song';
+                    
+              case '专辑':
+                return 'https://weapp.demo2.mixmedia.com/netease/album';
+                    
+              case '歌单':
+                return 'https://weapp.demo2.mixmedia.com/netease/playlist';                 
+            }
+        }
+        if (provider == '虾米') {
+          switch (select_type) {
+              case '单首歌曲':
+                return 'https://weapp.demo2.mixmedia.com/xiami/song';
+                    
+              case '专辑':
+                return 'https://weapp.demo2.mixmedia.com/xiami/album';
+
+                    
+              case '歌单':
+                return 'https://weapp.demo2.mixmedia.com/xiami/collect';
+                                       
+            }
+
+        }
+        if (provider == '腾讯') {
+              if (select_type == '歌单') {
+                return 'https://weapp.demo2.mixmedia.com/qqmusic/playlist'; 
+              }                             
+        }
+    }
+
+    onLoad() {
+      let self = this
+      this.$parent.getUserInfo(function (userInfo) {
+        if (userInfo) {
+          self.userInfo = userInfo
+        }
+        self.$apply()
+      })
+    }
+
+
+
+  }
+</script>
