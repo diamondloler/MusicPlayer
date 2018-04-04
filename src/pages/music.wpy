@@ -431,23 +431,25 @@ export default class Music extends wepy.page {
     //**********************************基本配置层--底部**********************************
 
     //**********************************生命钩子层--顶部**********************************
-    onReady() {
-       this.initNewAudio()
-    }
-
     onLoad() {
         const model = this
-        wepy.getStorage({
-            key:'musicInfo',
-            success: function (res) { 
-                //验证缓存数据的类型     
-                if (res.data instanceof Array) {
-                    model.musicInfo = res.data
-                } else {
-                    model.musicInfo[0] = res.data
-                }          
-                model.$apply()
-            }
+        new Promise(function (resolve) { 
+            wepy.getStorage({
+                key:'musicInfo',
+                success: function (res) { 
+                    //验证缓存数据的类型     
+                    if (res.data instanceof Array) {
+                        model.musicInfo = res.data
+                    } else {
+                        model.musicInfo[0] = res.data
+                    }          
+                    model.$apply()
+                    resolve()
+                }
+            })
+        })
+        .then(function () {
+            model.initNewAudio()
         })
    }
    //**********************************生命钩子层--底部**********************************
@@ -542,7 +544,6 @@ export default class Music extends wepy.page {
         }
 
         return times.join(':')
-
     }
 
     updateProgress() {
